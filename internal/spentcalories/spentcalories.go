@@ -24,7 +24,8 @@ func parseTraining(data string) (int, string, time.Duration, error) {
 	if len(parts) == 1 && parts[0] == data {
 		return 0, "", 0, errors.New("ошибка, сплит не сработал, нет разделителя")
 	}
-	if len(parts) < 3 {
+	//if len(parts) < 3 {
+	if len(parts) != 3 {
 		return 0, "", 0, errors.New("ошибка, неверный формат")
 	}
 	step := parts[0]

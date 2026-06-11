@@ -28,9 +28,14 @@ func parsePackage(data string) (int, time.Duration, error) {
 	if len(parts) == 1 && parts[0] == data {
 		return 0, 0, errors.New("ошибка, сплит не сработал, нет разделителя\n")
 	}
-	if len(parts) < 2 ||  len(parts) > 2{
-		return 0, 0, errors.New("ошибка, неверный формат\n")
-	}
+	// Нет смысла в этой проверке, так как если мы прошли 35 строку, то точно части 2
+	// if len(parts) < 2 ||  len(parts) > 2{
+	// 	return 0, 0, errors.New("ошибка, неверный формат\n")
+	// }
+	// Можно проще, "len(parts) < 2 ||  len(parts) > 2" заменить на !=
+	// if len(parts) != 2 {
+	// 	return 0, 0, errors.New("ошибка, неверный формат\n")
+	// }
 	if len(parts) == 2 {
 		steps := parts[0] 
 		time_walk := parts[1]
@@ -43,7 +48,8 @@ func parsePackage(data string) (int, time.Duration, error) {
 		}
 		durationWalk, err = time.ParseDuration(time_walk)
 		if err != nil {
-			return 0, 0, errors.New("ошибка, неверный формат\n")
+			//return 0, 0, errors.New("ошибка, неверный формат\n")
+			return 0, 0, fmt.Errorf("conversion error: %w", err)
 		}
 		if durationWalk <= 0 {
 			return 0, 0, errors.New("ошибка, продолжительность 0\n")
@@ -56,11 +62,11 @@ func DayActionInfo(data string, weight, height float64) (string) {
 	steps, duration, err :=  parsePackage(data)
 	if err != nil {
 		log.Println(err)
-		fmt.Printf("%v", err)
+	//	fmt.Printf("%v", err)
 		return ""
 	}
 	if steps <= 0 {
-		fmt.Printf("%v", err)
+	//	fmt.Printf("%v", err)
 		log.Println(err)
 		return ""
 	}
@@ -69,7 +75,7 @@ func DayActionInfo(data string, weight, height float64) (string) {
 	strSteps := fmt.Sprintf("Количество шагов: %d.\n", steps)
 	calories, err := spentcalories.WalkingSpentCalories(steps, weight, height, duration)
 	if err != nil {
-		fmt.Printf("%v", err)
+	//	fmt.Printf("%v", err)
 		log.Println(err)
 		return ""
 	}
